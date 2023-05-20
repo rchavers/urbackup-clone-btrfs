@@ -43,12 +43,12 @@ from traceback import print_exc, format_exc
 ## globals and subvolume dataclass
 ##
 
-# (optional) show stats after this many send|receive tasks
+# (optional) show filesystem stats after this many send|receive tasks
 # set SHOW_STATS_INTERVAL = 0 to disable
 SHOW_STATS_INTERVAL = 10
 
 # (optional) path to pv utility and the output format to use
-# set PV = '' if stats are not wanted or pv is not installed
+# set PV = '' if send/recv stats are not wanted or pv is not installed
 PV = '/usr/bin/pv -f -F "time [%t] -- rate %a -- size [%b]"'
 
 # (required) path to btrfs utility
@@ -57,6 +57,7 @@ BTRFS = '/usr/bin/btrfs'
 # (required) path to rsync utility
 RSYNC = '/usr/bin/rsync'
 
+# RSYNC_DST will contain RSYC_SRC_LIST folders (databases, symlinks, etc)
 # {src}, {dst} are evaluated to their respective args
 # rsync_src_list trailing slashes will be removed
 RSYNC_DST = '{dst}/zz.misc.backups'
