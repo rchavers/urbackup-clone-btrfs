@@ -4,7 +4,7 @@ clone UrBackup BTRFS snapshots to another BTRFS filesystem -- Backup the backup 
 This script will use btrfs send and receive to make a copy (not technically a clone since the uuids are different) of a working UrBackup folder structure.  This program can currently only copy to another local filesystem.  I did not need to have remote (for instance, via ssh) capabilities, however, it can be used with multiple destination btrfs filesystems.  For example, I have a helper cron script that will mount multiple LUKS encrypted btrfs disks that are rotated offsite as needed.
 
 ### Requirements:
-* Have UrBackup installed using the btrfs filesystem https://www.urbackup.org/
+* UrBackup installed using the btrfs filesystem https://www.urbackup.org/
 * Python v3.5+ installed https://www.python.org/
 * Storage system large enough to hold a copy of your current backups
 
