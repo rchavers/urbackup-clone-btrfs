@@ -53,7 +53,73 @@ RSYNC_SRC_LIST = ['/var/urbackup', '{src}/clients', '{src}/urbackup']
 </pre>
 
 ### Output example:
-(coming soon)
+<pre>
+2023-05-20 07:03:02 
+2023-05-20 07:03:02 This program copies a UrBackup BTRFS source to a new destination
+2023-05-20 07:03:02 
+2023-05-20 07:03:02      Source BTRFS uuid 5dfc6e64-f75f-11ed-8792-3988dc35b6cc path /mnt/backups/urbackup
+2023-05-20 07:03:02 Destination BTRFS uuid 98b28c07-0f2a-4acb-97a5-21cacf646c6c path /mnt/offsite-urbackup
+2023-05-20 07:03:02 
+2023-05-20 07:03:02 * building subvolumes for /mnt/backups/urbackup
+2023-05-20 07:03:03 * building subvolumes for /mnt/offsite-urbackup
+2023-05-20 07:03:05 
+2023-05-20 07:03:05        Source (3459 subvols, 2427 parents, 123 orphans, 72.0% full): /mnt/backups/urbackup
+2023-05-20 07:03:05   Destination (3447 subvols, 2306 parents,  10 orphans, 76.2% full): /mnt/offsite-urbackup
+2023-05-20 07:03:05 
+2023-05-20 07:03:05 * Using rsync to backup databases and client symlinks
+2023-05-20 07:03:05   executing: /usr/bin/rsync -a --delete --relative "/var/urbackup" "/mnt/offsite-urbackup/zz.misc.backups"
+2023-05-20 07:06:45   Successfully copied "/var/urbackup" to "/mnt/offsite-urbackup/zz.misc.backups"
+2023-05-20 07:06:45   executing: /usr/bin/rsync -a --delete --relative "/mnt/backups/urbackup/clients" "/mnt/offsite-urbackup/zz.misc.backups"
+2023-05-20 07:06:45   Successfully copied "/mnt/backups/urbackup/clients" to "/mnt/offsite-urbackup/zz.misc.backups"
+2023-05-20 07:06:45   executing: /usr/bin/rsync -a --delete --relative "/mnt/backups/urbackup/urbackup" "/mnt/offsite-urbackup/zz.misc.backups"
+2023-05-20 07:09:59   Successfully copied "/mnt/backups/urbackup/urbackup" to "/mnt/offsite-urbackup/zz.misc.backups"
+2023-05-20 07:09:59 * Deleting the following stray destination subvolumes:
+2023-05-20 07:09:59   ('/mnt/offsite-urbackup/client1/230217-2353_Image_SYSVOL', '/mnt/offsite-urbackup/client2/230519-0653_Image_ESP', '/mnt/offsite-urbackup/client3/230515-0852_Image_SYSVOL', '/mnt/offsite-urbackup/client2/230519-0649_Image_SYSVOL', '/mnt/offsite-urbackup/client1/230217-2359_Image_C', '/mnt/offsite-urbackup/client3/230515-0855_Image_ESP')
+2023-05-20 07:10:04 * skipping: "/mnt/backups/urbackup/client4/230513-0602_Image_C"
+2023-05-20 07:10:04   [subvol is not readonly]
+2023-05-20 07:10:04 * skipping: "/mnt/backups/urbackup/client5/230513-0721_Image_C"
+2023-05-20 07:10:04   [subvol is not readonly]
+2023-05-20 07:10:04 * skipping: "/mnt/backups/urbackup/client6/230513-0841_Image_C"
+2023-05-20 07:10:04   [subvol is not readonly]
+2023-05-20 07:10:04 * skipping: "/mnt/backups/urbackup/client7/230515-1013_Image_C"
+2023-05-20 07:10:04   [subvol is not readonly]
+2023-05-20 07:10:05 * skipping: "/mnt/backups/urbackup/client8/230516-1258_Image_C"
+2023-05-20 07:10:05   [subvol is not readonly]
+2023-05-20 07:10:05 * skipping: "/mnt/backups/urbackup/client9/230517-2217_Image_C"
+2023-05-20 07:10:05   [subvol is not readonly]
+2023-05-20 07:10:05 * skipping: "/mnt/backups/urbackup/client10/230518-0644_Image_C"
+2023-05-20 07:10:05   [subvol is not readonly]
+2023-05-20 07:10:05 * sending "/mnt/backups/urbackup/client3/230519-0528_Image_C" to "/mnt/offsite-urbackup/client3/230519-0528_Image_C"
+2023-05-20 07:32:47   time [0:22:40] -- rate [ 131MiB/s] -- size [ 175GiB]
+2023-05-20 07:32:47 * skipping: "/mnt/backups/urbackup/client11/230519-0848_Image_SYSVOL"
+2023-05-20 07:32:47   [subvol is not readonly]
+2023-05-20 07:32:47 * skipping: "/mnt/backups/urbackup/client12/230519-1659_Image_C"
+2023-05-20 07:32:47   [subvol is not readonly]
+2023-05-20 07:32:47 * sending "/mnt/backups/urbackup/client13/230519-2247" to "/mnt/offsite-urbackup/client13/230519-2247"
+2023-05-20 07:32:47   parent  "/mnt/backups/urbackup/client13/230518-2309"
+2023-05-20 07:32:49   time [0:00:00] -- rate [25.7KiB/s] -- size [2.73KiB]
+2023-05-20 07:32:49 * sending "/mnt/backups/urbackup/client1/230520-0142_Image_SYSVOL" to "/mnt/offsite-urbackup/client1/230520-0142_Image_SYSVOL"
+2023-05-20 07:32:52   time [0:00:00] -- rate [40.6MiB/s] -- size [27.0MiB]
+2023-05-20 07:32:52 * sending "/mnt/backups/urbackup/client1/230520-0143_Image_C" to "/mnt/offsite-urbackup/client1/230520-0143_Image_C"
+2023-05-20 07:32:52   parent  "/mnt/backups/urbackup/client1/230513-0137_Image_C"
+2023-05-20 07:35:29   time [0:02:28] -- rate [96.4MiB/s] -- size [14.0GiB]
+2023-05-20 07:35:29 * sending "/mnt/backups/urbackup/client14/230520-0312_Image_SYSVOL" to "/mnt/offsite-urbackup/client14/230520-0312_Image_SYSVOL"
+2023-05-20 07:35:33   time [0:00:03] -- rate [ 240MiB/s] -- size [ 941MiB]
+2023-05-20 07:35:33 * sending "/mnt/backups/urbackup/client15/230520-0142" to "/mnt/offsite-urbackup/client15/230520-0142"
+2023-05-20 07:35:33   parent  "/mnt/backups/urbackup/client15/230519-0100"
+2023-05-20 07:35:37   time [0:00:01] -- rate [8.70MiB/s] -- size [15.3MiB]
+2023-05-20 07:35:37 * sending "/mnt/backups/urbackup/client14/230520-0329_Image_ESP" to "/mnt/offsite-urbackup/client14/230520-0329_Image_ESP"
+2023-05-20 07:35:38   time [0:00:00] -- rate [ 229MiB/s] -- size [ 100MiB]
+2023-05-20 07:35:38 * skipping: "/mnt/backups/urbackup/client14/230520-0335_Image_C"
+2023-05-20 07:35:38   [subvol is not readonly]
+2023-05-20 07:35:38 * sending "/mnt/backups/urbackup/client16/230520-0512" to "/mnt/offsite-urbackup/client16/230520-0512"
+2023-05-20 07:35:38   parent  "/mnt/backups/urbackup/client16/230519-0546"
+2023-05-20 07:35:49   time [0:00:08] -- rate [ 275KiB/s] -- size [2.37MiB]
+2023-05-20 07:35:49 
+2023-05-20 07:35:49        Source (3459 subvols, 2427 parents, 123 orphans, 72.0% full): /mnt/backups/urbackup
+2023-05-20 07:35:49   Destination (3447 subvols, 2306 parents,  10 orphans, 76.7% full): /mnt/offsite-urbackup
+2023-05-20 07:35:49 
+</pre>
 
 ### Notes:
 My understanding of the UrBackup file structure is as follows (please correct me if my knowledge is faulty):
