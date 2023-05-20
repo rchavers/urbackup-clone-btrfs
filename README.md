@@ -3,7 +3,9 @@ clone UrBackup BTRFS snapshots to another BTRFS filesystem -- Backup the backup 
 
 This script will use btrfs send and receive to make a copy (not technically a clone since the uuids are different) of a working UrBackup folder structure.  This program can currently only copy to another local filesystem.  I did not need to have remote (for instance, via ssh) capabilities, however, it can be used with multiple destination btrfs filesystems.  For example, I have a helper cron script that will mount multiple LUKS encrypted btrfs disks that are rotated offsite as needed.
 
-Since the program can compare each subvolume on the the source and destination, it can safely be stopped any time.  The next time it runs, if it finds an interrupted send/receive, it will delete the unfinished subvolume copy and start it over.  However, the program does NOT resume in the middle of a send/receive.  This is not a problem for my needs, as even my biggest image copies are only a few hundred gigabytes, so the entire copy takes less than an hour anyway.
+Since the program can compare each subvolume on the the source and destination, it can safely be stopped any time.  The next time it runs, if it finds an interrupted send/receive, it will delete the unfinished subvolume copy and start it over.  However, the program does NOT resume the send/receive where it left off.  This is not a problem for my needs, as even my biggest backup images are only a few hundred gigabytes, so the entire copy takes less than an hour.  If your images are several terabyes, you may not want to interrupt the backup (or, help update the code).
+
+In my experience, btrfs send/receive is pretty slow; especially when UrBackup has several incremental parent subvolumes.  Howver, this program was not noticeably slower than using any of the other programs I tried.
 
 ### Requirements:
 * UrBackup installed using the btrfs filesystem https://www.urbackup.org/
@@ -49,6 +51,9 @@ RSYNC = '/usr/bin/rsync'
 RSYNC_DST = '{dst}/zz.misc.backups'
 RSYNC_SRC_LIST = ['/var/urbackup', '{src}/clients', '{src}/urbackup']
 </pre>
+
+### Output example:
+(coming soon)
 
 ### Notes:
 My understanding of the UrBackup file structure is as follows (please correct me if my knowledge is faulty):
