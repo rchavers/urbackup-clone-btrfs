@@ -50,7 +50,7 @@ RSYNC_SRC_LIST = ['/var/urbackup', '{src}/clients', '{src}/urbackup']
 
 ### Notes:
 My understanding of the UrBackup file structure is as follows (please correct me if my knowledge is faulty):
-* UrBackup stores the active databases and various support files in /var/lib/urbackup
+* UrBackup stores the active databases and various support files in /var/urbackup
 * UrBackup stores backup copies of the databases, etc. on the "Backup storage path" from the settings (eg. /mnt/backups/urbackup)
 * UrBackup stores a client's most recent file backup (not image backup) as symlinks in /mnt/backups/urbackup/clients
 * The "Backup storage path" is a btrfs filesystem
