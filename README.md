@@ -3,6 +3,8 @@ clone UrBackup BTRFS snapshots to another BTRFS filesystem -- Backup the backup 
 
 This script will use btrfs send and receive to make a copy (not technically a clone since the uuids are different) of a working UrBackup folder structure.  This program can currently only copy to another local filesystem.  I did not need to have remote (for instance, via ssh) capabilities, however, it can be used with multiple destination btrfs filesystems.  For example, I have a helper cron script that will mount multiple LUKS encrypted btrfs disks that are rotated offsite as needed.
 
+Since the program can compare each subvolume on the the source and destination, it can safely be stopped any time.  The next time it runs, if it finds an interrupted send/receive, it will delete the unfinished subvolume copy and start it over.  However, the program does NOT resume in the middle of a send/receive.  This is not a problem for my needs, as even my biggest image copies are only a few hundred gigabytes, so the entire copy takes less than an hour anyway.
+
 ### Requirements:
 * UrBackup installed using the btrfs filesystem https://www.urbackup.org/
 * Python v3.5+ installed https://www.python.org/
@@ -51,8 +53,16 @@ RSYNC_SRC_LIST = ['/var/urbackup', '{src}/clients', '{src}/urbackup']
 ### Notes:
 My understanding of the UrBackup file structure is as follows (please correct me if my knowledge is faulty):
 * UrBackup stores the active databases and various support files in /var/urbackup
-* UrBackup stores backup copies of the databases, etc. on the "Backup storage path" from the settings (eg. /mnt/backups/urbackup)
+* UrBackup stores backup copies of the databases, etc. see: "Backup storage path" in settings. (eg. /mnt/backups/urbackup)
 * UrBackup stores a client's most recent file backup (not image backup) as symlinks in /mnt/backups/urbackup/clients
-* The "Backup storage path" is a btrfs filesystem
-  * However, the client folders directly under that path are not subvolumes, but are instead regular linux directories
+* The "Backup storage path" is a btrfs filesystem:
+  * However, the client folders directly under that path are not subvolumes, but are instead regular directories
   * The actual backup folders are subvolumes
+
+### FAQ:
+#### Why create this, why not simply use program x, y or z?
+I tried several other btrfs clone/backup/copy programs, but none of them worked exactly how I wanted.  Most requrired a snapshot at the main btrfs filesystem level.  That is to say, I would have needed to keep a snapshot of /mnt/backups/urbackup/.  Then, you need to clone that snapshot.  This approach is *Much* easier than writing this script.  However, if that snapshot was removed, I would no longer be able to keep my offiste disks in sync without start over from scratch.  With 40TB of data, that takes a really long time!  As my backups grow, that snapshot needs to stay around and the storage deltas from that snapshot can't easily be released without starting a new copy.
+#### How does this program solve the snapshot issue above?
+urbackup-clone-btrfs.py does not need a urbackup main subvolume snapshot to work.  It simply re-creates the file structure and keeps the source and destination in sync using the original parent/child relationship information as defined by the btrfs subvolume list command.  It will iterate through each subvolume and check if a valid copy already exists, if not, call btrfs send and recieve.
+
+
