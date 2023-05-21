@@ -26,7 +26,7 @@ urbackup-clone-btrfs.py --interactive --verbose /src/urbackup/mountpoint /dst/bt
 * UrBackup installed using the btrfs filesystem https://www.urbackup.org/
 * Python v3.5+ installed https://www.python.org/
 * rsync https://rsync.samba.org/
-* Storage system large enough to hold a copy of your current backups
+* BTRFS filesystem large enough to hold a copy of your current backups
 
 ### Nice to have (but not required):
 * pv (pipe viewer) http://www.ivarch.com/programs/pv.shtml
