@@ -142,3 +142,4 @@ I tried several other btrfs clone/backup/copy programs, but none of them worked 
 ##### How does this program solve the snapshot issue mentioned above?
 urbackup-clone-btrfs.py does not need a UrBackup main subvolume snapshot to work.  It simply re-creates the file structure and keeps the source and destination in sync using the original parent/child relationship information as defined by the btrfs subvolume list command.  It will iterate through each subvolume and check if a valid copy already exists, if not, use btrfs send and receive to create one.  An offsite disk can be missing without having a common snapshot, simply bring the offsite disk back and anything new is copied over.  Furthermore, use --delete-strays to remove any extraneous subvolumes on the destination that have been removed from the source.
 
+##### In short, this program was written specificaly to fully backup all UrBackup subvolumes (and databases, etc).
