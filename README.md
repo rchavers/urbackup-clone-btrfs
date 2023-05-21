@@ -9,13 +9,23 @@ In my experience, btrfs send/receive can be fairly slow; especially when UrBacku
 
 In my case, I needed to use compression on the destination btrfs filesytem as originally the data did not completely fit without it.  Thus far, I have had no issues with compression enabled.  I have successfully used this script with over 3500 UrBackup subvolumes, close to 30TB of source data, spanning several offsite copies; YMMV.
 
-&nbsp;
+## tl;dr
+If you are in a hurry and just want to get started...
+1) Download urbackup-clone-btrfs.py to /usr/local/bin or somewhere in your PATH
+2) <pre>/usr/local/bin/urbackup-clone-btrfs.py --interactive --verbose /src/urbackup/mountpoint /dst/btrfs/mountpoint</pre>
+3) enjoy the copy!
+
+## 
 
 ### Requirements:
 * Linux or a Linux-like OS with btrfs-progs installed (tested with Ubuntu 22.04)
 * UrBackup installed using the btrfs filesystem https://www.urbackup.org/
 * Python v3.5+ installed https://www.python.org/
+* rsync https://rsync.samba.org/
 * Storage system large enough to hold a copy of your current backups
+
+### Nice to have (but not required):
+* pv (pipe viewer) https://manpages.ubuntu.com/manpages/focal/man8/pvs.8.html
 
 ### Usage:
 <pre>
