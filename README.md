@@ -11,9 +11,13 @@ In my case, I needed to use compression on the destination btrfs filesytem as or
 
 ## tl;dr
 If you are in a hurry and just want to get started...
-1) Download urbackup-clone-btrfs.py to /usr/local/bin or somewhere in your PATH
-2) <pre>/usr/local/bin/urbackup-clone-btrfs.py --interactive --verbose /src/urbackup/mountpoint /dst/btrfs/mountpoint</pre>
-3) enjoy the copy!
+1) Download urbackup-clone-btrfs.py to /usr/local/bin/ (or somewhere within your PATH)
+2) Ensure you have a new and empty btrfs fielsystem for the copy
+3) Run urbackup-clone-btrfs.py, perhaps like this:
+<pre>
+chmod +x /usr/local/bin/urbackup-clone-btrfs.py
+urbackup-clone-btrfs.py --interactive --verbose /src/urbackup/mountpoint /dst/btrfs/mountpoint
+</pre>
 
 ## 
 
@@ -25,7 +29,7 @@ If you are in a hurry and just want to get started...
 * Storage system large enough to hold a copy of your current backups
 
 ### Nice to have (but not required):
-* pv (pipe viewer) https://manpages.ubuntu.com/manpages/focal/man8/pvs.8.html
+* pv (pipe viewer) http://www.ivarch.com/programs/pv.shtml
 
 ### Usage:
 <pre>
