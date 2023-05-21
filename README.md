@@ -1,11 +1,13 @@
 # urbackup-clone-btrfs.py
-clone UrBackup BTRFS snapshots to another BTRFS filesystem -- Backup the backup :-)
+clone UrBackup BTRFS subvolumes to another BTRFS filesystem -- Backup the backup :-)
 
-This script will use btrfs send and receive to make a copy (not technically a clone since the uuids are different) of a working UrBackup folder structure.  This program can currently only copy to another local filesystem.  I did not need to have remote (for instance, via ssh) capabilities, however, it can be used with multiple destination btrfs filesystems.  For example, I have a helper cron script that will mount multiple LUKS encrypted btrfs disks that are rotated offsite as needed.
+This script uses btrfs send and receive to make a copy (not technically a clone since the uuids are different) of a working UrBackup folder structure.  This program can currently only copy to another local filesystem.  I did not need it to have remote capabilities, however, it can be used with multiple destination btrfs filesystems.  For example, I have a helper cron script that will mount multiple LUKS encrypted btrfs raid volumes that are rotated offsite as needed.
 
-Since the program can compare each subvolume on the the source and destination, it can safely be stopped any time.  The next time it runs, if it finds an interrupted send/receive, it will delete the unfinished subvolume copy and start it over.  However, the program does NOT resume the send/receive where it left off.  This is not a problem for my needs, as even my biggest backup images are only a few hundred gigabytes, so the entire copy takes less than an hour.  If your images are several terabyes, you may not want to interrupt the backup (or, help update the code).
+Since the program will compare each subvolume on the the source and destination, it can safely be stopped any time.  The next time it runs, if it finds an interrupted send/receive, it will delete the unfinished subvolume copy and start it over.  However, the program does NOT resume the send/receive where it left off.  This is not a problem for my needs, as even my biggest backup images are only a few hundred gigabytes, so the entire copy takes less than an hour.  If your images are several terabyes, you may not want to interrupt the backup.  Feel free to help update the code, if resuming send/receive is needed.
 
-In my experience, btrfs send/receive is pretty slow; especially when UrBackup has several incremental parent subvolumes.  Howver, this program was not noticeably slower than using any of the other programs I tried.
+In my experience, btrfs send/receive can be farily slow; especially when UrBackup has several incremental parent subvolumes.  Howver, this program was not noticeably slower than using any of the other method I tried.  For my initial "clones", I used tmux and used the --interactive program argument to see realtime send/receive stats and also to keep an eye on disk usage.  In my case, I needed to use compression on the destination btrfs filesytem as originally the data did not complete fit without it.  Thus far, I have had no issues with compression enabled.
+
+&nbsp;
 
 ### Requirements:
 * UrBackup installed using the btrfs filesystem https://www.urbackup.org/
@@ -53,6 +55,7 @@ RSYNC_SRC_LIST = ['/var/urbackup', '{src}/clients', '{src}/urbackup']
 </pre>
 
 ### Output example:
+_Client names, uuids, and subvolumes have been changed to protect the innocent_
 <pre>
 2023-05-20 07:03:02 
 2023-05-20 07:03:02 This program copies a UrBackup BTRFS source to a new destination
@@ -132,8 +135,7 @@ My understanding of the UrBackup file structure is as follows (please correct me
 
 ### FAQ:
 #### Why create this, why not simply use program x, y or z?
-I tried several other btrfs clone/backup/copy programs, but none of them worked exactly how I wanted.  Most requrired a snapshot at the main btrfs filesystem level.  That is to say, I would have needed to keep a snapshot of /mnt/backups/urbackup/.  Then, you need to clone that snapshot.  This approach is *Much* easier than writing this script.  However, if that snapshot was removed, I would no longer be able to keep my offiste disks in sync without start over from scratch.  With 40TB of data, that takes a really long time!  As my backups grow, that snapshot needs to stay around and the storage deltas from that snapshot can't easily be released without starting a new copy.
-#### How does this program solve the snapshot issue above?
-urbackup-clone-btrfs.py does not need a urbackup main subvolume snapshot to work.  It simply re-creates the file structure and keeps the source and destination in sync using the original parent/child relationship information as defined by the btrfs subvolume list command.  It will iterate through each subvolume and check if a valid copy already exists, if not, call btrfs send and recieve.
-
+I tried several other btrfs clone/backup/copy programs, but none of them worked exactly how I wanted.  Most requrired a snapshot at the main btrfs filesystem level.  That is to say, I would have needed to keep a snapshot of /mnt/backups/urbackup/.  Then, you need to send/receive using that snapshot.  The snapshot approach would be *Much* easier than writing this script.  However, there is one big negative consequence: you must always keep at least one common snapshot between original location and backup. When you lose the last common snapshot you must restart with a full copy.  Ouch, that would take a really long time!  Also, as my backups continue grow, that snapshot needs to stay around and the storage deltas from that snapshot can't be released until all offsite copies have a new common snapshot.
+#### How does this program solve the snapshot issue mentioned above?
+urbackup-clone-btrfs.py does not need a urbackup main subvolume snapshot to work.  It simply re-creates the file structure and keeps the source and destination in sync using the original parent/child relationship information as defined by the btrfs subvolume list command.  It will iterate through each subvolume and check if a valid copy already exists, if not, use btrfs send and recieve to create one.  An offsite disk can be missing without having a common snapshot, simply bring the offsite disk back and anything new is copied over.  Simply use --delete-strays to remove any extraneous subvolumes on the destination that have been removed from the source.
 
