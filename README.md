@@ -72,6 +72,9 @@ RSYNC_SRC_LIST = ['/var/urbackup', '{src}/clients', '{src}/urbackup']
 </pre>
 
 ### Output example:
+Command used to create the output below:
+<pre>urbackup-clone-btrfs.py /mnt/backups/urbackup /mnt/offsite-urbackup --delete-strays --verbose</pre>
+
 _Client names, uuids, and subvolumes have been changed to protect the innocent_
 <pre>
 2023-05-20 07:03:02 
