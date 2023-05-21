@@ -127,7 +127,7 @@ _Client names, uuids, and subvolumes have been changed to protect the innocent_
 2023-05-20 07:35:49 
 </pre>
 
-### Notes:
+#### Notes:
 My understanding of the UrBackup file structure is as follows (please correct me if my knowledge is faulty):
 * UrBackup stores the active databases and various support files in /var/urbackup
 * UrBackup stores backup copies of the databases, etc. see: "Backup storage path" in settings. (eg. /mnt/backups/urbackup)
@@ -136,9 +136,9 @@ My understanding of the UrBackup file structure is as follows (please correct me
   * However, the client folders directly under that path are not subvolumes, but are instead regular directories
   * The actual backup folders are subvolumes
 
-### FAQ:
-#### Why create this, why not simply use program x, y or z?
+#### FAQ:
+##### Why create this, why not simply use program x, y or z?
 I tried several other btrfs clone/backup/copy programs, but none of them worked exactly how I wanted.  Most required a snapshot at the main btrfs filesystem level.  That is to say, I would have needed to keep a snapshot of the source filesystem, then send/receive using that snapshot.  The snapshot approach would be *much* easier than writing this script.  However, there is one big negative consequence: you must always keep at least one common snapshot between the source filesystem and each destination. When you lose the last common snapshot you must restart with a full copy.  Ouch, that would take a really long time!  Also, as my backups continue grow (think UrBackup deletes old snapshots), that snapshot needs to stay around and the storage deltas from that snapshot can't be released until all offsite copies have a new common snapshot.
-#### How does this program solve the snapshot issue mentioned above?
+##### How does this program solve the snapshot issue mentioned above?
 urbackup-clone-btrfs.py does not need a UrBackup main subvolume snapshot to work.  It simply re-creates the file structure and keeps the source and destination in sync using the original parent/child relationship information as defined by the btrfs subvolume list command.  It will iterate through each subvolume and check if a valid copy already exists, if not, use btrfs send and receive to create one.  An offsite disk can be missing without having a common snapshot, simply bring the offsite disk back and anything new is copied over.  Furthermore, use --delete-strays to remove any extraneous subvolumes on the destination that have been removed from the source.
 
