@@ -381,7 +381,7 @@ def do_send_receive(src_full_path, dst_full_path, src_parent_full_path=None):
     while not directly handling the stdin and stdout pipes.
         Why, you ask?
     when I originally tried handling all the pipes between send, pv,
-    and receive directly, the cpu usage was way too high.  Eventyally, I
+    and receive directly, the cpu usage was way too high.  Eventually, I
     settled on letting popen pipe stdout directly from send to pv
     to recv.  I found python 3.5+ allows setting non-blocking PIPE reads.
     This allows me to capture pv's output in realtime (+ send/receive errors)
