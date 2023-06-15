@@ -3,6 +3,9 @@
 ## this is an example bash script to ensure urbackup-clone-btrfs
 ## will only run one instance (using flock)
 ## this also relies on a helper script urbackup-clone-btrfs.mount.py
+## crontab example:
+## # backup the backup... run urbackup-clone-btrfs.sh daily at 7am and 7pm
+## 0   7,19    *   *   *   /usr/local/bin/urbackup-clone-btrfs.sh
 
 # change these variables as needed
 source="/mnt/backups/urbackup"
