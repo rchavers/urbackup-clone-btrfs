@@ -50,8 +50,8 @@ urbackup-clone-btrfs.py [-h] [-v] [--delete-strays] [--dry-run] [--interactive] 
 </pre>
 
 positional arguments:
-  * src              source btrfs path
-  * dst              destination btrfs path
+  * src              source (local btrfs mountpoint or remote ssh url)
+  * dst              destination (local btrfs mountpoint or remote ssh url)
 
 options:
   * -h, --help       show this help message and exit
@@ -60,6 +60,8 @@ options:
   * --dry-run        simulation mode, no changes made to destination
   * --interactive    run interactively (e.g. from a tty or tmux)
   * --ignore-errors  continue after send/recv errors
+
+url can either be local or ssh :: Local example /path/to/mountpoint :: SSH example ssh://[[user@]host[:port]]/remote/path
 
 ### Edit global variables (if needed) before running:
 <pre>
