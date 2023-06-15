@@ -1,7 +1,7 @@
 # urbackup-clone-btrfs.py
 clone UrBackup BTRFS subvolumes to another BTRFS filesystem -- Backup the backup :-)
 
-This script uses btrfs send and receive to make a copy (not technically a clone since the uuids are different) of a working UrBackup folder structure.  This program can currently only copy to another local filesystem (that can be later taken offsite).  I did not need it to have remote capabilities, however, it can be used with multiple destination btrfs filesystems.  For example, I have a helper cron script that will mount multiple LUKS encrypted btrfs raid volumes that are rotated offsite as needed.
+This script uses btrfs send and receive to make a copy (not technically a clone since the uuids are different) of a working UrBackup folder structure.  This program can currently be used with ssh support for send and receive.  Similar to rsync, ssh support cannot be used for both send and receive at the same time, either send can use ssh or receive can use ssh for each run.  I have included a helper cron script that will mount multiple local LUKS encrypted btrfs raid volumes that are rotated offsite as needed.
 
 Since the program will compare each subvolume on the the source and destination, it can safely be stopped any time.  The next time it runs, if it finds an interrupted send/receive, it will delete the unfinished subvolume copy and start it over.  However, the program does NOT resume the send/receive where it left off.  This is not a problem for my needs, as even my biggest backup images are only a few hundred gigabytes, so the entire copy takes less than an hour.  If your images are several terabytes, you may not want to interrupt the backup.  Feel free to help update the code, if resuming send/receive is needed.
 
@@ -19,13 +19,26 @@ chmod +x /usr/local/bin/urbackup-clone-btrfs.py
 urbackup-clone-btrfs.py --interactive --verbose /src/urbackup/mountpoint /dst/btrfs/mountpoint
 </pre>
 
+use ssh to send to remote host:
+<pre>
+chmod +x /usr/local/bin/urbackup-clone-btrfs.py
+urbackup-clone-btrfs.py --interactive --verbose /src/urbackup/mountpoint ssh://user@remotehost:port/dst/btrfs/mountpoint
+</pre>
+
+use ssh to receive from remote host:
+<pre>
+chmod +x /usr/local/bin/urbackup-clone-btrfs.py
+urbackup-clone-btrfs.py --interactive --verbose ssh://user@remotehost:port/src/urbackup/mountpoint /dst/btrfs/mountpoint
+</pre>
+
 ## 
 
 ### Requirements:
 * Linux or a Linux-like OS with btrfs-progs installed (tested with Ubuntu 22.04)
 * UrBackup installed using the btrfs filesystem https://www.urbackup.org/
-* Python v3.5+ installed https://www.python.org/
-* rsync https://rsync.samba.org/
+* Python v3.10+ installed https://www.python.org/
+* rsync v3.2.3+ installed https://rsync.samba.org/
+* ssh, sshfs, fusermount installed
 * BTRFS filesystem large enough to hold a copy of your current backups
 
 ### Nice to have (but not required):
