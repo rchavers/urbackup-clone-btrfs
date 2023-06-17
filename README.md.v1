@@ -1,3 +1,8 @@
+#NOTE: This is the OLDER version (v1) of this readme.
+#I've kept it here until the newer version is better tested,
+#and for reference purposes.
+
+
 # urbackup-clone-btrfs.py
 clone UrBackup BTRFS subvolumes to another BTRFS filesystem -- Backup the backup :-)
 
